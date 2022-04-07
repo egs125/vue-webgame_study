@@ -1,0 +1,71 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>끝말잇기</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </head>
+
+    <body>
+        <div id="root">
+            <word-relay start-word="초밥"></word-relay>
+            <word-relay start-word="제로초"></word-relay>
+        </div>
+    </body>
+
+    <script>
+        // 컴포넌트 선언은 인스턴스보다 위에 위치
+        // 전역 컴포넌트
+        Vue.component('word-relay', {// 케밥 케이스
+            template: `
+            <div>
+                <form v-on:submit="onSubmitForm">
+                    {{word}}
+                    <input type="text" ref="text" v-model="value"/>
+                    <button type="submit">입력</button>
+                </form>
+                <div id="result">{{result}}</div>
+            </div>
+            `,
+            props: [ 'startWord '], // HTML에서 케밥케이스로 작성하면 자바스크립트에서 카멜케이스로 받아서 사용 가능
+            data() {    // 컴포넌트화 시킬 때는 반드시 data는 함수로 구현해야함
+                return {
+                    word: this.startWord,
+                    result: '',
+                    value: '',
+                };
+            },
+            methods: {
+                onSubmitForm(e) {
+                    e.preventDefault();
+
+                    const lastWord = this.word[this.word.length - 1];
+                    const firstValue = this.value[0];
+                    // const lastWord = this.word.substring(this.word.length - 1);
+                    // const firstValue = this.value.substring(0, 1);
+                    
+                    if ( lastWord === firstValue ) {
+                        this.result = '딩동댕';
+                        this.word = this.value;
+                        this.value = '';
+                        this.$refs.text.focus();
+                    } else {
+                        this.result = '땡'
+                        this.value = '';
+                        this.$refs.text.focus();
+                    }
+                },
+            },
+        });
+        // Vue.component('WordRelay') // 파스칼 케이스
+        // Vue.component('wordRelay') // 카멜 케이스
+    </script>
+    <script>
+        // 뷰 인스턴스 선언은 컴포넌트 선언보다 아래에, 스크립트는 div#root 보다 아래에 위치해야함
+        const app = new Vue({
+            el: '#root',
+        });
+    </script>
+</html>
