@@ -2,6 +2,7 @@
   <div>
     <div>{{turn}}님의 턴입니다.</div>
     <table-component>
+      <!-- Vuex 연결 시 computed에서 매번 다시 렌더링되므로 컴포넌트 분할이 무의미, Tick Tack Toe에서 모두 렌더 처리 -->
       <tr v-for="(rowData, rowIndex) in tableData" :key="rowIndex">
         <td @click="onClickTd(rowIndex, cellIndex)" v-for="(cellData, cellIndex) in rowData" :key="cellIndex">{{cellData}}</td>
       </tr>
